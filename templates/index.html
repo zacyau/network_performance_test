@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网络性能测试工具</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>网络性能测试</h1>
+      <p class="subtitle">测量网址的 DNS 解析、TCP 建连、SSL 握手、首包响应、重定向等耗时与请求详情</p>
+    </header>
+
+    <main>
+      <!-- 测试表单 -->
+      <section class="panel">
+        <form id="test-form" class="form">
+          <div class="form-row">
+            <input
+              type="url"
+              id="url-input"
+              name="url"
+              value="https://www.baidu.com"
+              placeholder="https://example.com"
+              autocomplete="off"
+              required
+            >
+            <button type="submit" id="submit-btn">开始测试</button>
+          </div>
+        </form>
+        <p id="error-msg" class="error-msg" hidden></p>
+      </section>
+
+      <!-- 测试结果 -->
+      <section class="panel" id="result-panel" hidden>
+        <div class="panel-head">
+          <h2>耗时指标</h2>
+          <span id="result-url" class="url-tag"></span>
+        </div>
+
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>指标</th>
+              <th class="num">耗时 (ms)</th>
+              <th class="num">占比</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DNS 解析</td>
+              <td class="num" id="dns_time">-</td>
+              <td class="num" id="dns_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>TCP 建连</td>
+              <td class="num" id="tcp_time">-</td>
+              <td class="num" id="tcp_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>SSL 握手</td>
+              <td class="num" id="ssl_time">-</td>
+              <td class="num" id="ssl_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>预备耗时</td>
+              <td class="num" id="prepare_time">-</td>
+              <td class="num" id="prepare_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>首包响应</td>
+              <td class="num" id="first_byte_time">-</td>
+              <td class="num" id="first_byte_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>传输耗时</td>
+              <td class="num" id="transfer_time">-</td>
+              <td class="num" id="transfer_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>重定向</td>
+              <td class="num" id="redirect_time">-</td>
+              <td class="num" id="redirect_time_ratio">-</td>
+            </tr>
+            <tr>
+              <td>整体耗时</td>
+              <td class="num" id="total_time">-</td>
+              <td class="num">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 请求详情 -->
+      <section class="panel" id="detail-panel" hidden>
+        <div class="panel-head">
+          <h2>请求详情</h2>
+        </div>
+
+        <table class="metrics-table">
+          <tbody>
+            <tr>
+              <td>HTTP 状态码</td>
+              <td class="num" id="http_code">-</td>
+            </tr>
+            <tr>
+              <td>HTTP 版本</td>
+              <td class="num" id="http_version">-</td>
+            </tr>
+            <tr>
+              <td>远端地址</td>
+              <td class="num" id="remote_addr">-</td>
+            </tr>
+            <tr>
+              <td>重定向次数</td>
+              <td class="num" id="num_redirects">-</td>
+            </tr>
+            <tr>
+              <td>下载大小</td>
+              <td class="num" id="size_download">-</td>
+            </tr>
+            <tr>
+              <td>下载速度</td>
+              <td class="num" id="speed_download">-</td>
+            </tr>
+            <tr>
+              <td>内容类型</td>
+              <td class="num" id="content_type">-</td>
+            </tr>
+            <tr>
+              <td>SSL 证书</td>
+              <td class="num" id="cert_cn">-</td>
+            </tr>
+            <tr>
+              <td>证书颁发者</td>
+              <td class="num" id="cert_issuer_cn">-</td>
+            </tr>
+            <tr>
+              <td>证书有效期</td>
+              <td class="num" id="cert_validity">-</td>
+            </tr>
+            <tr>
+              <td>剩余有效天数</td>
+              <td class="num" id="cert_days">-</td>
+            </tr>
+            <tr>
+              <td>证书验证</td>
+              <td class="num" id="ssl_verify">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>基于 curl 的网络性能测量 · FastAPI 服务端渲染</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
