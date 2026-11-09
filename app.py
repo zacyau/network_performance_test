@@ -28,6 +28,12 @@ CURL_WRITE_OUT = (
 
 CURL_TIMEOUT = 30
 
+# 模拟普通浏览器，避免默认 curl UA 被反爬拦截
+BROWSER_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+)
+
 
 def _to_int(value, default=0):
     try:
@@ -125,6 +131,7 @@ async def test_network(request: Request, url: str = Query(..., description="要�
             "-L",                       # 跟随重定向
             "-o", "/dev/null",          # 丢弃响应体
             "--max-time", str(CURL_TIMEOUT),
+            "-A", BROWSER_UA,           # 浏览器 User-Agent
             "-w", CURL_WRITE_OUT,
             url,
         ]
