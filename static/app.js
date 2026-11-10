@@ -9,6 +9,7 @@
   var errorMsg = document.getElementById("error-msg");
   var resultPanel = document.getElementById("result-panel");
   var detailPanel = document.getElementById("detail-panel");
+  var sslPanel = document.getElementById("ssl-panel");
   var resultUrl = document.getElementById("result-url");
 
   var TIME_FIELDS = [
@@ -122,6 +123,8 @@
     resultUrl.textContent = urlInput.value.trim();
     resultPanel.hidden = false;
     detailPanel.hidden = false;
+    // HTTP 站点无 SSL 信息，隐藏面板
+    sslPanel.hidden = !(data.cert_cn || data.ssl_protocol);
   }
 
   form.addEventListener("submit", function (e) {
