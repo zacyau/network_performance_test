@@ -69,6 +69,7 @@
     }
 
     setText("http_version", data.http_version ? "HTTP/" + data.http_version : "-");
+    setText("server_info", data.server || "-");
 
     var addr =
       data.remote_ip && data.remote_port
@@ -82,6 +83,8 @@
     setText("content_type", data.content_type || "-");
 
     // SSL 证书信息（HTTP 站点为空）
+    setText("ssl_protocol", data.ssl_protocol || "-");
+    setText("ssl_cipher", data.ssl_cipher || "-");
     setText("cert_cn", data.cert_cn || "-");
     setText("cert_issuer_cn", data.cert_issuer_cn || "-");
 

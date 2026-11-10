@@ -74,6 +74,22 @@ def _extract_cn(distinguished_name):
     return m.group(1).strip() if m else ""
 
 
+def _parse_ssl_connection(verbose_stderr):
+    """从 curl -v 输出解析 SSL 协议与加密套件
+    如 '* SSL connection using TLSv1.3 / AES128-GCM-SHA256 / ...'（取最后一条，对应最终连接）"""
+    m = re.findall(r"SSL connection using\s+(\S+)\s*/\s*(\S+)", verbose_stderr)
+    if m:
+        protocol, cipher = m[-1]
+        return protocol, cipher
+    return "", ""
+
+
+def _parse_server_header(verbose_stderr):
+    """从 curl -v 输出解析最终响应的 Server 头，如 '< Server: nginx'（取最后一条）"""
+    m = re.findall(r"^\s*\*?\s*<\s+server:\s*(.+)$", verbose_stderr, flags=re.I | re.M)
+    return m[-1].strip() if m else ""
+
+
 def _parse_cert_info(verbose_stderr):
     """从 curl -v 的 stderr 中解析最终连接的 SSL 证书信息"""
     info = {
@@ -183,6 +199,12 @@ async def test_network(request: Request, url: str = Query(..., description="要�
 
         # SSL 证书信息（HTTP 站点为空）
         response.update(_parse_cert_info(result.stderr))
+        # SSL 协议与加密套件（HTTP 站点为空）
+        ssl_protocol, ssl_cipher = _parse_ssl_connection(result.stderr)
+        response["ssl_protocol"] = ssl_protocol
+        response["ssl_cipher"] = ssl_cipher
+        # 服务端信息（Server 响应头，站点未返回则为空）
+        response["server"] = _parse_server_header(result.stderr)
         return response
     except subprocess.TimeoutExpired:
         return JSONResponse(status_code=500, content={"error": "测试超时，请稍后重试"})

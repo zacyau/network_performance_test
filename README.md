@@ -51,8 +51,11 @@ python3 app.py
   "tcp_time": 30.1,
   "ssl_time": 60.5,
   "first_byte_time": 45.0,
-  "total_time": 148.0
+  "total_time": 148.0,
+  "ssl_protocol": "TLSv1.3",
+  "ssl_cipher": "AES128-GCM-SHA256",
+  "server": "nginx"
 }
 ```
 
-各字段单位均为毫秒（ms）。
+各耗时字段单位均为毫秒（ms）；另有 HTTP 状态码/版本、远端地址、重定向、下载大小与速度、内容类型、SSL 证书信息等字段。
